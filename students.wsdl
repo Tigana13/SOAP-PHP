@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="Students"
+             targetNamespace="urn:Students"
+             xmlns:tns="urn:Students"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+             xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+             xmlns="http://schemas.xmlsoap.org/wsdl/">
+
+    <message name="FilterStudentRequest">
+        <part name="params" type="xsd:string"/>
+    </message>
+
+    <message name="FilterStudentResponse">
+        <part name="result" type="xsd:string"/>
+    </message>
+
+    <message name="RegisterRequest">
+        <part name="login" type="xsd:string"/>
+        <part name="password" type="xsd:string"/>
+    </message>
+
+    <message name="RegisterResponse">
+        <part name="result" type="xsd:string"/>
+    </message>
+
+    <portType name="FilterStudentPort">
+        <operation name="filterByAdmission">
+            <input message="tns:student_admission"/>
+            <output message="tns:Student"/>
+        </operation>
+    </portType>
+
+    <binding name="FilterStudentBinding" type="tns:FilterPort">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="filterByAdmission">
+            <soap:operation soapAction="urn:FilterAction"/>
+            <input>
+                <soap:body use="encoded" namespace="urn:student_admission" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="urn:Student" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="register">
+            <soap:operation soapAction="urn:RegisterAction"/>
+            <input>
+                <soap:body use="encoded" namespace="urn:Students" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="encoded" namespace="urn:Students" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+    </binding>
+
+    <service name="WSDLService">
+        <port name="FilterStudentPort" binding="tns:FilterStudentBinding">
+            <soap:address location="http://localhost/api/wsdl/students/soap-server.php"/>
+        </port>
+    </service>
+</definitions>
